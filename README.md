@@ -100,6 +100,8 @@ Use `timestamps: true` to automatically generate `createdAt` and `updatedAt` fie
 
 Import the base contact set from `contacts.json` into your database using any UI tool (MongoDB Compass, etc.). Ensure the collection name in your code matches the one in the visual interface.
 
+The local seed file is stored at `src/db/data/contacts.json`. If you want to import it from the command line, you can also run `npm run import:contacts`.
+
 #### Step 5: Routes and Controllers 🛣️
 
 Create a GET request by defining the `/contacts` path, which returns an array of all contacts.
