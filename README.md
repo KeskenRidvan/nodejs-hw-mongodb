@@ -59,7 +59,7 @@ In `src/server.js`, create a function named `setupServer` that will create the e
 4.  Starting the server on the port specified via the `PORT` environment variable, or port 3000 if not specified.
 5.  Printing the message `"Server is running on port {PORT}"` to the console when the server starts successfully.
 
-Don't forget to specify the environment variable in the `.env.example` file. 📄
+Don't forget to specify the environment variable in the `.env` file. 📄
 Create the `src/index.js` file. Import and call the `setupServer` function in this file.
 
 #### Step 3: MongoDB Connection 🍃
@@ -146,8 +146,7 @@ Deploy your application from the `hw2-mongodb` branch to [render.com](https://re
 - The assignment must be on the `hw2-mongodb` branch.
 - Do **not** push `node_modules` to the repository (remember `.gitignore`). 🚫
 - The project structure must match the one described in the task.
-- You do **not** need to upload your `.env` file. 🔒
-- A file named `.env.example` must be included with all variable names:
+- Use the `.env` file for the variables:
   - PORT, MONGODB_USER, MONGODB_PASSWORD, MONGODB_URL, MONGODB_DB.
 - Follow the response structure requirements strictly.
 - Don't forget to include your **Render** deployment link in your submission\! 📎
