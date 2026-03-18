@@ -2,10 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const pino = require('pino-http');
 
-const {
-  getAllContactsController,
-  getContactByIdController,
-} = require('./controllers/contacts');
+const contactsRouter = require('./routers/contacts');
+const { notFoundHandler } = require('./middlewares/notFoundHandler');
+const { errorHandler } = require('./middlewares/errorHandler');
 
 const setupServer = () => {
   const app = express();
@@ -15,26 +14,10 @@ const setupServer = () => {
   app.use(express.json());
   app.use(pino());
 
-  app.get('/contacts', getAllContactsController);
-  app.get('/contacts/:contactId', getContactByIdController);
+  app.use('/contacts', contactsRouter);
 
-  app.use((req, res) => {
-    res.status(404).json({
-      message: 'Not found',
-    });
-  });
-
-  app.use((error, _req, res, _next) => {
-    if (error.name === 'CastError' && error.path === '_id') {
-      return res.status(404).json({
-        message: 'Contact not found',
-      });
-    }
-
-    return res.status(500).json({
-      message: 'Something went wrong',
-    });
-  });
+  app.use(notFoundHandler);
+  app.use(errorHandler);
 
   return app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
