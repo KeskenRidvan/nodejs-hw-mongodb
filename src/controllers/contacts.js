@@ -8,8 +8,8 @@ const {
   deleteContact,
 } = require('../services/contacts');
 
-const getAllContactsController = async (_req, res) => {
-  const contacts = await getAllContacts();
+const getAllContactsController = async (req, res) => {
+  const contacts = await getAllContacts(req.query);
 
   res.status(200).json({
     status: 200,
