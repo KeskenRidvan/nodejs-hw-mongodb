@@ -36,7 +36,7 @@ const createContactController = async (req, res) => {
   const contact = await createContact({
     ...req.body,
     userId: req.user._id,
-  });
+  }, req.file);
 
   return res.status(201).json({
     status: 201,
@@ -46,7 +46,12 @@ const createContactController = async (req, res) => {
 };
 
 const patchContactController = async (req, res) => {
-  const contact = await patchContact(req.user._id, req.params.contactId, req.body);
+  const contact = await patchContact(
+    req.user._id,
+    req.params.contactId,
+    req.body,
+    req.file
+  );
 
   if (!contact) {
     throw createHttpError(404, 'Contact not found');

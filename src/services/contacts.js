@@ -1,4 +1,7 @@
+const createHttpError = require('http-errors');
+
 const Contact = require('../db/models/contact');
+const { uploadToCloudinary } = require('../utils/uploadToCloudinary');
 
 const SORT_ORDER = {
   asc: 1,
@@ -90,13 +93,36 @@ const getAllContacts = async (
 const getContactById = (userId, contactId) =>
   Contact.findOne({ _id: contactId, userId });
 
-const createContact = (payload) => Contact.create(payload);
+const saveContactPhoto = async (file) => {
+  if (!file) {
+    return undefined;
+  }
 
-const patchContact = (userId, contactId, payload) =>
-  Contact.findOneAndUpdate({ _id: contactId, userId }, payload, {
-    new: true,
-    runValidators: true,
-  });
+  try {
+    return await uploadToCloudinary(file);
+  } catch {
+    throw createHttpError(500, 'Failed to upload the contact photo.');
+  }
+};
+
+const createContact = async (payload, file) => {
+  const photo = await saveContactPhoto(file);
+
+  return Contact.create(photo ? { ...payload, photo } : payload);
+};
+
+const patchContact = async (userId, contactId, payload, file) => {
+  const photo = await saveContactPhoto(file);
+
+  return Contact.findOneAndUpdate(
+    { _id: contactId, userId },
+    photo ? { ...payload, photo } : payload,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+};
 
 const deleteContact = (userId, contactId) =>
   Contact.findOneAndDelete({ _id: contactId, userId });

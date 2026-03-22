@@ -29,6 +29,10 @@ const contactSchema = new Schema(
       trim: true,
       ...STRING_FIELD_RULES,
     },
+    photo: {
+      type: String,
+      trim: true,
+    },
     isFavourite: {
       type: Boolean,
       default: false,

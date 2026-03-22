@@ -1,4 +1,12 @@
 const errorHandler = (error, _req, res, _next) => {
+  if (error.name === 'MulterError') {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+      data: error.message,
+    });
+  }
+
   if (error.name === 'CastError' && error.path === '_id') {
     return res.status(404).json({
       status: 404,
