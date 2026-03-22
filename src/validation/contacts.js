@@ -16,11 +16,15 @@ const createContactSchema = {
 };
 
 const updateContactSchema = {
-  async validate(payload) {
+  async validate(payload, req) {
     const payloadKeys = Object.keys(payload || {});
 
-    if (payloadKeys.length === 0) {
+    if (payloadKeys.length === 0 && !req.file) {
       throw createHttpError(400, 'Body must have at least one field');
+    }
+
+    if (payloadKeys.length === 0) {
+      return;
     }
 
     const contact = new Contact(buildValidationPayload(payload));

@@ -2,6 +2,11 @@ const bcrypt = require('bcrypt');
 const createHttpError = require('http-errors');
 const { randomBytes } = require('node:crypto');
 const { isValidObjectId } = require('mongoose');
+const { sendEmail } = require('../utils/sendEmail');
+const {
+  createResetPasswordToken,
+  verifyResetPasswordToken,
+} = require('../utils/resetPasswordToken');
 
 const Session = require('../db/models/session');
 const User = require('../db/models/user');
@@ -112,6 +117,59 @@ const logoutUser = async ({ sessionId, refreshToken }) => {
   });
 };
 
+const sendResetEmail = async ({ email }) => {
+  const normalizedEmail = email.toLowerCase();
+  const user = await User.findOne({ email: normalizedEmail });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found!');
+  }
+
+  const resetToken = createResetPasswordToken(normalizedEmail);
+  const resetPasswordUrl = new URL(
+    'reset-password',
+    process.env.APP_DOMAIN.endsWith('/')
+      ? process.env.APP_DOMAIN
+      : `${process.env.APP_DOMAIN}/`
+  );
+
+  resetPasswordUrl.searchParams.set('token', resetToken);
+
+  try {
+    await sendEmail({
+      to: normalizedEmail,
+      subject: 'Reset your password',
+      text: `Use this link to reset your password: ${resetPasswordUrl.toString()}`,
+      html: `<p>Use this <a href="${resetPasswordUrl.toString()}">link</a> to reset your password.</p>`,
+    });
+  } catch {
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later.'
+    );
+  }
+};
+
+const resetPassword = async ({ token, password }) => {
+  let payload;
+
+  try {
+    payload = verifyResetPasswordToken(token);
+  } catch {
+    throw createHttpError(401, 'Token is expired or invalid.');
+  }
+
+  const user = await User.findOne({ email: payload.email });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found!');
+  }
+
+  user.password = await bcrypt.hash(password, SALT_ROUNDS);
+  await user.save();
+  await Session.deleteMany({ userId: user._id });
+};
+
 const findSessionByAccessToken = (accessToken) =>
   Session.findOne({ accessToken });
 
@@ -122,6 +180,8 @@ module.exports = {
   loginUser,
   refreshUsersSession,
   logoutUser,
+  sendResetEmail,
+  resetPassword,
   findSessionByAccessToken,
   findUserById,
 };

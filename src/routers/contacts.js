@@ -8,6 +8,7 @@ const {
   deleteContactController,
 } = require('../controllers/contacts');
 const { isValidId } = require('../middlewares/isValidId');
+const upload = require('../middlewares/upload');
 const { validateBody } = require('../middlewares/validateBody');
 const { ctrlWrapper } = require('../utils/ctrlWrapper');
 const {
@@ -24,12 +25,14 @@ router.get('/', ctrlWrapper(getAllContactsController));
 router.get('/:contactId', isValidId, ctrlWrapper(getContactByIdController));
 router.post(
   '/',
+  upload.single('photo'),
   validateBody(createContactSchema),
   ctrlWrapper(createContactController)
 );
 router.patch(
   '/:contactId',
   isValidId,
+  upload.single('photo'),
   validateBody(updateContactSchema),
   ctrlWrapper(patchContactController)
 );

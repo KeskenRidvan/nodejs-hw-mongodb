@@ -3,6 +3,8 @@ const {
   loginUser,
   refreshUsersSession,
   logoutUser,
+  sendResetEmail,
+  resetPassword,
 } = require('../services/auth');
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -88,9 +90,31 @@ const logoutUserController = async (req, res) => {
   res.status(204).send();
 };
 
+const sendResetEmailController = async (req, res) => {
+  await sendResetEmail(req.body);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Reset password email has been successfully sent.',
+    data: {},
+  });
+};
+
+const resetPasswordController = async (req, res) => {
+  await resetPassword(req.body);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Password has been successfully reset.',
+    data: {},
+  });
+};
+
 module.exports = {
   registerUserController,
   loginUserController,
   refreshSessionController,
   logoutUserController,
+  sendResetEmailController,
+  resetPasswordController,
 };
