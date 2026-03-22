@@ -3,3 +3,5 @@
 #### nodejs-h3-crud: https://nodejs-hw-mongodb-h3-crud.onrender.com/contacts
 
 #### nodejs-hw4-validation: https://nodejs-hw-mongodb-hw4-validation-bpe7.onrender.com/contacts
+
+#### nodejs-hw5-auth: https://nodejs-hw-mongodb-hw5-auth-8t58.onrender.com
