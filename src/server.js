@@ -1,7 +1,9 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const pino = require('pino-http');
 
+const authRouter = require('./routers/auth');
 const contactsRouter = require('./routers/contacts');
 const { notFoundHandler } = require('./middlewares/notFoundHandler');
 const { errorHandler } = require('./middlewares/errorHandler');
@@ -10,10 +12,17 @@ const setupServer = () => {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
 
-  app.use(cors());
+  app.use(
+    cors({
+      origin: true,
+      credentials: true,
+    })
+  );
   app.use(express.json());
+  app.use(cookieParser());
   app.use(pino());
 
+  app.use('/auth', authRouter);
   app.use('/contacts', contactsRouter);
 
   app.use(notFoundHandler);

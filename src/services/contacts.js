@@ -38,18 +38,21 @@ const parseBoolean = (value) => {
   return undefined;
 };
 
-const getAllContacts = async ({
-  page = 1,
-  perPage = 10,
-  sortBy = '_id',
-  sortOrder = 'asc',
-  type,
-  isFavourite,
-} = {}) => {
+const getAllContacts = async (
+  userId,
+  {
+    page = 1,
+    perPage = 10,
+    sortBy = '_id',
+    sortOrder = 'asc',
+    type,
+    isFavourite,
+  } = {}
+) => {
   const currentPage = parseNumber(page, 1);
   const currentPerPage = parseNumber(perPage, 10);
   const currentSortBy = SORT_FIELDS.includes(sortBy) ? sortBy : '_id';
-  const filter = {};
+  const filter = { userId };
 
   if (type) {
     filter.contactType = type;
@@ -84,17 +87,19 @@ const getAllContacts = async ({
   };
 };
 
-const getContactById = (contactId) => Contact.findById(contactId);
+const getContactById = (userId, contactId) =>
+  Contact.findOne({ _id: contactId, userId });
 
 const createContact = (payload) => Contact.create(payload);
 
-const patchContact = (contactId, payload) =>
-  Contact.findByIdAndUpdate(contactId, payload, {
+const patchContact = (userId, contactId, payload) =>
+  Contact.findOneAndUpdate({ _id: contactId, userId }, payload, {
     new: true,
     runValidators: true,
   });
 
-const deleteContact = (contactId) => Contact.findByIdAndDelete(contactId);
+const deleteContact = (userId, contactId) =>
+  Contact.findOneAndDelete({ _id: contactId, userId });
 
 module.exports = {
   getAllContacts,
