@@ -2,6 +2,9 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const pino = require('pino-http');
+const swaggerUi = require('swagger-ui-express');
+
+const swaggerDocument = require('../docs/swagger.json');
 
 const authRouter = require('./routers/auth');
 const contactsRouter = require('./routers/contacts');
@@ -22,6 +25,7 @@ const setupServer = () => {
   app.use(cookieParser());
   app.use(pino());
 
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use('/auth', authRouter);
   app.use('/contacts', contactsRouter);
 

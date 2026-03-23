@@ -1,0 +1,41 @@
+tags:
+  - Contacts
+summary: Update a contact
+operationId: patchContact
+description: Updates one contact belonging to the authenticated user and supports replacing the contact photo.
+security:
+  - bearerAuth: []
+parameters:
+  - $ref: ../../../components/parameters/contactId.yaml
+requestBody:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        $ref: ../../../components/schemas/contactUpdate.yaml
+responses:
+  '200':
+    description: Successfully patched a contact.
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully patched a contact!
+            data:
+              $ref: ../../../components/schemas/contact.yaml
+  '400':
+    $ref: ../../../components/responses/BadRequest.yaml
+  '401':
+    $ref: ../../../components/responses/Unauthorized.yaml
+  '404':
+    $ref: ../../../components/responses/NotFound.yaml
