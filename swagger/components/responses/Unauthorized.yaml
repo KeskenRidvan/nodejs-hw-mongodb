@@ -1,0 +1,9 @@
+description: Authentication failed.
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/errorResponse.yaml
+    example:
+      status: 401
+      message: Please provide a valid access token
+      data: Please provide a valid access token

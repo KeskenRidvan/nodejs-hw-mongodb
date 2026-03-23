@@ -1,0 +1,19 @@
+type: object
+required:
+  - status
+  - message
+  - data
+properties:
+  status:
+    type: integer
+    example: 400
+  message:
+    type: string
+    example: Invalid contact id
+  data:
+    oneOf:
+      - type: string
+      - type: object
+      - type: array
+      - type: 'null'
+    example: Invalid contact id

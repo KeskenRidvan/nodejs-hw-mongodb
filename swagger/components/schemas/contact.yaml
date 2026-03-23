@@ -1,0 +1,55 @@
+type: object
+required:
+  - _id
+  - userId
+  - name
+  - phoneNumber
+  - isFavourite
+  - contactType
+  - createdAt
+  - updatedAt
+properties:
+  _id:
+    type: string
+    description: Contact identifier.
+    example: 65e4decdd286b30065d54af9
+  userId:
+    type: string
+    description: Owner user identifier.
+    example: 65e4ddcfd286b30065d54af5
+  name:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: Alice Johnson
+  phoneNumber:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: '+905551112233'
+  email:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: alice@example.com
+  photo:
+    type: string
+    example: https://res.cloudinary.com/demo/image/upload/v1/contacts/alice.jpg
+  isFavourite:
+    type: boolean
+    example: true
+  contactType:
+    type: string
+    enum:
+      - work
+      - home
+      - personal
+    example: personal
+  createdAt:
+    type: string
+    format: date-time
+    example: 2026-03-23T10:20:30.000Z
+  updatedAt:
+    type: string
+    format: date-time
+    example: 2026-03-23T10:20:30.000Z

@@ -1,0 +1,32 @@
+type: object
+minProperties: 1
+properties:
+  name:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: Alice Johnson
+  phoneNumber:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: '+905551112233'
+  email:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: alice@example.com
+  isFavourite:
+    type: boolean
+    example: true
+  contactType:
+    type: string
+    enum:
+      - work
+      - home
+      - personal
+    example: work
+  photo:
+    type: string
+    format: binary
+    description: Optional replacement image file.

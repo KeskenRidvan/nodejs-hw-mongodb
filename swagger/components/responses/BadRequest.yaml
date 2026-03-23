@@ -1,0 +1,9 @@
+description: Bad request.
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/errorResponse.yaml
+    example:
+      status: 400
+      message: Invalid contact id
+      data: Invalid contact id
